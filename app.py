@@ -357,34 +357,41 @@ with col_right:
 st.markdown("---")
 
 # BOTTOM ROW: BRAND ANALYSIS AND PROTEIN SOURCES
-col_bottom_left, col_bottom_right = st.columns(2)
-
 with col_bottom_left:
     st.subheader("Brand Health Leaderboard")
-
+    
     if brand_df is not None and len(brand_df) > 0:
-        top_brands = brand_df.head(10)
-
-        fig_brand = px.bar(
-            top_brands,
-            x='primary_brand',
-            y='healthy_pct',
-            color='healthy_pct',
-            color_continuous_scale='Greens',
-            title="Top 10 Brands by % Healthy Products",
-            labels={
-                'primary_brand': 'Brand',
-                'healthy_pct': '% Healthy Products'
-            },
-            text='healthy_pct',
-            height=400
-        )
-        fig_brand.update_traces(texttemplate='%{text:.1f}%', textposition='outside')
-        fig_brand.update_layout(xaxis_tickangle=-45, coloraxis_showscale=False)
-        st.plotly_chart(fig_brand, use_container_width=True)
-
-        with st.expander("View Full Brand Leaderboard"):
-            st.dataframe(brand_df, use_container_width=True, hide_index=True)
+        
+        # Check if required columns exist
+        required_cols = ['primary_brand', 'healthy_pct']
+        missing_cols = [col for col in required_cols if col not in brand_df.columns]
+        
+        if missing_cols:
+            st.warning(f"Brand data missing columns: {missing_cols}")
+            st.write("Available columns:", brand_df.columns.tolist())
+        else:
+            top_brands = brand_df.head(10)
+            
+            fig_brand = px.bar(
+                top_brands,
+                x='primary_brand',
+                y='healthy_pct',
+                color='healthy_pct',
+                color_continuous_scale='Greens',
+                title="Top 10 Brands by % Healthy Products",
+                labels={
+                    'primary_brand': 'Brand',
+                    'healthy_pct': '% Healthy Products'
+                },
+                text='healthy_pct',
+                height=400
+            )
+            fig_brand.update_traces(texttemplate='%{text:.1f}%', textposition='outside')
+            fig_brand.update_layout(xaxis_tickangle=-45, coloraxis_showscale=False)
+            st.plotly_chart(fig_brand, use_container_width=True)
+            
+            with st.expander("View Full Brand Leaderboard"):
+                st.dataframe(brand_df, use_container_width=True, hide_index=True)
     else:
         st.info("Brand data not available.")
 
