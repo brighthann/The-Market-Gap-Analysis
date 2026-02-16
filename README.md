@@ -1,3 +1,21 @@
+### A. The Executive Summary
+**Summary**
+The snack market is filled with unhealthy snacks, with 'chocolates and candy' and 'cookies and biscuits' making up the largest category. Nuts and seeds have a high percentage of healthy products even thought they do not dominate the overall market. There is a lot of market opportunity in the 'chocolates and candy' and 'cookies and biscuits' categories, which are currently saturated eith high sugar low protein products. It will be a good category to produce more healthy snacks.
+
+### B. Project Links
+* **Link to Notebook:** [Notebook](https://colab.research.google.com/drive/1JwVEK_1ieml2wj3A1Ly9yV5G2LO7ftJ-?usp=sharing)
+* **Link to Dashboard:** [Dashboard](https://the-market-gap-analysis-bfpcl4dcy39vhgzvrehvht.streamlit.app/)
+* **Link to Presentation:** [Presentation](https://github.com/brighthann/The-Market-Gap-Analysis/blob/eb858a4f4ae81a190966cbc6e59fe572a771188c/The%20sugar_trap_market_analysis_presentation.pdf)
+
+### C. Technical Explanation
+**Data Cleaning**
+The dataset was scanned systematically, and only the columns relevant to the analysis objectives were retained. this is a method which is analogous to the searching algorithm. filters were used to isolate records which met the stated criteria. this approach created a controlled dataset where only the targeted features of the dataset are present and, incomplete and invalid records are removed.
+The next step involved converting the now workable data into a format that can easitly be handled. Eg. numeric columns are force converted to float type for better sorting. some of them contained text which made them unrecognizable, meaning they could not be used because they are not standalone numbers. these after failing the conversion, become NaN instead of raising an error. In short, the ral numbers hiding in the messy data are found and everything else is removed, so that calculations work properply.
+  
+**"Candidate's Choice"**
+Finding brands with the highest percentage of healthy products involved using the health standard which was already defined in a previous story. This category makes use of high protein low salt products. the same data cleaning and filtering procedure that was used earlier was implemented. brands with multiple name entries were filtered - the first name is assumed to be the parent name and subsequent names are considered as sub brands. Similar names with difference in capitalization are considered the same brand and then standardized to title case. the cleaning procedure is implemented once for each row in the brands column. Brand aggregation is implemented afterwards - how many products does each brand have in total, and how many of those products are considered healthy; after that it is turned to a percentage. brands with few number of products are ignored. all rows that share the same brand name are grouped together. Aggregation functions are applied to each group such that, the count on the product name gives the total number of products that are high protein low sugar products. Unknown brands are excluded before grouping. Finally they are sorted from the highest health percentage to the lowest.
+
+
 # Project Brief: The "Sugar Trap" Market Gap Analysis
 
 **Client:** Helix CPG Partners (Strategic Food & Beverage Consultancy)  
@@ -126,20 +144,20 @@ Please edit this `README.md` file in your forked repository to include the follo
 > **We do not accept "permission error" excuses. Test your links in Incognito Mode.**
 
 ### 1. Repository & Code Checks
-- [ ] **My GitHub Repo is Public.** (Open the link in a Private/Incognito window to verify).
-- [ ] **I have uploaded the `.ipynb` notebook file.**
-- [ ] **I have ALSO uploaded an HTML or PDF export** of the notebook.
-- [ ] **I have NOT uploaded the massive raw dataset.** (Use `.gitignore` or just don't commit the CSV).
-- [ ] **My code uses Relative Paths.** 
+- [ ✅ ] **My GitHub Repo is Public.** (Open the link in a Private/Incognito window to verify).
+- [ ✅ ] **I have uploaded the `.ipynb` notebook file.**
+- [ ✅ ] **I have ALSO uploaded an HTML or PDF export** of the notebook.
+- [ ✅ ] **I have NOT uploaded the massive raw dataset.** (Use `.gitignore` or just don't commit the CSV).
+- [ ✅ ] **My code uses Relative Paths.** 
 
 ### 2. Deliverable Checks
-- [ ] **My Dashboard link is publicly accessible.** (No login required).
-- [ ] **My Presentation link is publicly accessible.** (Permissions set to "Anyone with the link can view").
-- [ ] **I have updated this `README.md` file** with my Executive Summary and technical notes.
+- [ ✅ ] **My Dashboard link is publicly accessible.** (No login required).
+- [ ✅ ] **My Presentation link is publicly accessible.** (Permissions set to "Anyone with the link can view").
+- [ ✅ ] **I have updated this `README.md` file** with my Executive Summary and technical notes.
 
 ### 3. Completeness
-- [ ] I have completed **User Stories 1-4**.
-- [ ] I have completed the **"Candidate's Choice"** challenge and explained it in the README.
+- [✅ ] I have completed **User Stories 1-4**.
+- [✅ ] I have completed the **"Candidate's Choice"** challenge and explained it in the README.
 
 **✅ Only when you have checked every box above, proceed to the submission form.**
 
