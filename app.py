@@ -22,7 +22,7 @@ st.set_page_config(
 # DATA LOADING FROM ZIP FILE
 # ============================================================
 
-ZIP_FILE = 'dashboard_data.zip'  # Single ZIP file containing all data
+ZIP_FILE = 'categorized_products.zip'  # Single ZIP file containing all data
 
 
 @st.cache_data
@@ -87,7 +87,7 @@ def load_all_data_from_zip():
 
     except FileNotFoundError:
         st.error(f"ZIP file not found: {ZIP_FILE}")
-        st.info("Please ensure dashboard_data.zip is in the same directory as app.py")
+        st.info("Please ensure categorized_products.zip is in the same directory as app.py")
         data['df'] = None
         data['protein_threshold'] = None
         data['sugar_threshold'] = None
@@ -183,7 +183,7 @@ st.markdown("Identifying Blue Ocean opportunities in the snack aisle")
 if df is not None:
     st.markdown(f"Analyzing **{len(df):,}** snack products from the Open Food Facts database.")
 else:
-    st.error("No data loaded. Please check that dashboard_data.zip exists in the app directory.")
+    st.error("No data loaded. Please check that categorized_products.zip exists in the app directory.")
     st.stop()
 
 st.markdown("---")
