@@ -357,41 +357,59 @@ with col_right:
 st.markdown("---")
 
 # BOTTOM ROW: BRAND ANALYSIS AND PROTEIN SOURCES
+try:
+    col_bottom_left, col_bottom_right = st.columns(2)
+except:
+    # If column creation fails, create them manually
+    st.error("Column creation failed - using fallback layout")
+    col_bottom_left = st.container()
+    col_bottom_right = st.container()
+
 with col_bottom_left:
     st.subheader("Brand Health Leaderboard")
     
     if brand_df is not None and len(brand_df) > 0:
+        # Show raw data first to debug
+        with st.expander("Debug: Brand Data Structure"):
+            st.write("Columns:", list(brand_df.columns))
+            st.dataframe(brand_df.head())
         
-        # Check if required columns exist
-        required_cols = ['primary_brand', 'healthy_pct']
-        missing_cols = [col for col in required_cols if col not in brand_df.columns]
+        # Try to find brand column
+        brand_col = None
+        for col in brand_df.columns:
+            if any(x in col.lower() for x in ['brand', 'primary']):
+                brand_col = col
+                break
         
-        if missing_cols:
-            st.warning(f"Brand data missing columns: {missing_cols}")
-            st.write("Available columns:", brand_df.columns.tolist())
-        else:
+        # Try to find percentage column
+        pct_col = None
+        for col in brand_df.columns:
+            if any(x in col.lower() for x in ['healthy', 'pct', 'percent']):
+                pct_col = col
+                break
+        
+        if brand_col and pct_col:
             top_brands = brand_df.head(10)
-            
             fig_brand = px.bar(
                 top_brands,
-                x='primary_brand',
-                y='healthy_pct',
-                color='healthy_pct',
+                x=brand_col,
+                y=pct_col,
+                color=pct_col,
                 color_continuous_scale='Greens',
                 title="Top 10 Brands by % Healthy Products",
-                labels={
-                    'primary_brand': 'Brand',
-                    'healthy_pct': '% Healthy Products'
-                },
-                text='healthy_pct',
+                labels={brand_col: 'Brand', pct_col: '% Healthy Products'},
+                text=pct_col,
                 height=400
             )
             fig_brand.update_traces(texttemplate='%{text:.1f}%', textposition='outside')
             fig_brand.update_layout(xaxis_tickangle=-45, coloraxis_showscale=False)
             st.plotly_chart(fig_brand, use_container_width=True)
-            
-            with st.expander("View Full Brand Leaderboard"):
-                st.dataframe(brand_df, use_container_width=True, hide_index=True)
+        else:
+            st.warning("Could not create chart - showing data table instead")
+            st.dataframe(brand_df.head(10), use_container_width=True)
+        
+        with st.expander("View Full Brand Leaderboard"):
+            st.dataframe(brand_df, use_container_width=True, hide_index=True)
     else:
         st.info("Brand data not available.")
 
@@ -401,27 +419,46 @@ with col_bottom_right:
         "Among products that fall in the high-protein / low-sugar quadrant, "
         "these are the most commonly listed ingredients that drive high protein content."
     )
-
-    if protein_sources_df is not None:
-        top_sources = protein_sources_df.head(10)
-
-        fig_protein = px.bar(
-            top_sources,
-            x='count',
-            y='ingredient',
-            orientation='h',
-            color='count',
-            color_continuous_scale='Blues',
-            title="Most Common Protein Sources",
-            labels={
-                'count': 'Number of Products',
-                'ingredient': 'Ingredient'
-            },
-            height=350
-        )
-        fig_protein.update_layout(coloraxis_showscale=False)
-        st.plotly_chart(fig_protein, use_container_width=True)
-
+    
+    if protein_sources_df is not None and len(protein_sources_df) > 0:
+        # Debug info
+        with st.expander("Debug: Protein Sources Structure"):
+            st.write("Columns:", list(protein_sources_df.columns))
+            st.dataframe(protein_sources_df.head())
+        
+        # Find ingredient column
+        ingredient_col = None
+        for col in protein_sources_df.columns:
+            if any(x in col.lower() for x in ['ingredient', 'source']):
+                ingredient_col = col
+                break
+        
+        # Find count column
+        count_col = None
+        for col in protein_sources_df.columns:
+            if any(x in col.lower() for x in ['count', 'frequency']):
+                count_col = col
+                break
+        
+        if ingredient_col and count_col:
+            top_sources = protein_sources_df.head(10)
+            fig_protein = px.bar(
+                top_sources,
+                x=count_col,
+                y=ingredient_col,
+                orientation='h',
+                color=count_col,
+                color_continuous_scale='Blues',
+                title="Most Common Protein Sources",
+                labels={count_col: 'Number of Products', ingredient_col: 'Ingredient'},
+                height=350
+            )
+            fig_protein.update_layout(coloraxis_showscale=False)
+            st.plotly_chart(fig_protein, use_container_width=True)
+        else:
+            st.warning("Could not create chart - showing data table instead")
+            st.dataframe(protein_sources_df.head(10), use_container_width=True)
+        
         with st.expander("View Protein Source Data"):
             st.dataframe(protein_sources_df, use_container_width=True, hide_index=True)
     else:
